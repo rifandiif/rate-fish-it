@@ -152,7 +152,7 @@
             <td>${fish.name}</td>
             <td>${fish.location}</td>
             <td>1 / ${fish.base.toLocaleString()}</td>
-            <td>${finalRate.toExponential(6)}%</td>
+            <td>${finalRate.toFixed(6)}%</td>
           </tr>
         `;
         tableBody.innerHTML += row;
