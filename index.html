@@ -1,149 +1,155 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fish It — Profile + Secret Chance Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fish It — Secret Chance Calculator</title>
   <style>
-    :root{--bg:#070707;--panel:#0f1724;--muted:#9aa4ad;--accent:#38bdf8;--glass:rgba(255,255,255,0.03);--card:#0b1220}
-    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
-    body{background:linear-gradient(180deg,#030306 0%, #071029 100%);color:#e6eef6;display:flex;align-items:flex-start;justify-content:center;padding:36px}
-    .app{width:980px;max-width:96%;}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:14px;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-    header{display:flex;gap:16px;align-items:center}
-    h1{margin:0;font-size:20px;color:var(--accent)}
-    .subtitle{color:var(--muted);font-size:13px}
-
-    .tabs{display:flex;gap:8px;margin-top:14px}
-    .tab{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);cursor:pointer}
-    .tab.active{background:linear-gradient(90deg,var(--accent),#2563eb);color:#001;box-shadow:0 6px 18px rgba(56,189,248,0.12)}
-
-    .layout{display:flex;gap:18px;margin-top:18px}
-    .left{flex:0 0 320px}
-    .right{flex:1}
-
-    .profile-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px}
-    .avatar{width:84px;height:84px;border-radius:12px;background:#061021;display:flex;align-items:center;justify-content:center;overflow:hidden}
-    .avatar img{width:100%;height:100%;object-fit:cover}
-    .profile-row{display:flex;gap:12px;align-items:center}
-    .muted{color:var(--muted)}
-
-    label{display:block;margin-top:12px;color:var(--muted);font-size:13px}
-    input[type=text], input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:#071126;color:inherit}
-    .btn{margin-top:10px;padding:10px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),#2563eb);color:#001;font-weight:700;cursor:pointer;width:100%}
-
-    table{width:100%;border-collapse:collapse;margin-top:12px}
-    thead th{background:transparent;color:var(--accent);text-align:left;padding:10px}
-    tbody td{padding:10px;text-align:left;font-size:14px}
-    tbody tr:nth-child(even){background:rgba(255,255,255,0.01)}
-    tbody tr:hover{background:rgba(56,189,248,0.06)}
-
-    .history-actions{display:flex;gap:8px;margin-top:10px}
-    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:8px;border-radius:8px;cursor:pointer}
-
-    /* modal */
-    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));display:flex;align-items:center;justify-content:center;z-index:40}
-    .modal{background:#071227;padding:20px;border-radius:12px;width:420px;box-shadow:0 10px 40px rgba(2,6,23,0.8)}
-    .modal h2{margin:0;color:var(--accent)}
-    .small{font-size:13px;color:var(--muted)}
-
-    .note{margin-top:10px;color:var(--muted);font-size:13px}
-    .link{color:var(--accent);text-decoration:none}
-
-    @media(max-width:880px){.layout{flex-direction:column}.left{flex:unset}}
+    body {
+      background-color: #0d0d0d;
+      color: #f0f0f0;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #00bfff;
+      margin-top: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 191, 255, 0.15);
+      padding: 25px;
+    }
+    label {
+      font-weight: bold;
+      color: #a8a8a8;
+      display: block;
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      background-color: #2a2a2a;
+      color: #fff;
+      font-size: 1rem;
+      text-align: center;
+    }
+    button {
+      background-color: #00bfff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #0099cc;
+    }
+    .table-container {
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #111;
+      color: #00bfff;
+      cursor: pointer;
+    }
+    tr:nth-child(even) {
+      background-color: #151515;
+    }
+    tr:nth-child(odd) {
+      background-color: #1e1e1e;
+    }
+    .footer {
+      text-align: center;
+      color: #555;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+    /* Modal */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+    }
+    .modal h2 {
+      color: #00bfff;
+    }
+    .modal input {
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="card">
-      <header>
-        <div>
-          <h1>🎣 Fish It — Profile & Secret Chance</h1>
-          <div class="subtitle">Masukkan username Roblox, lihat profil, dan hitung peluang secret fish.</div>
-        </div>
-      </header>
-
-      <div class="tabs" role="tablist" aria-label="tabs">
-        <button class="tab active" data-tab="calculator">Calculator</button>
-        <button class="tab" data-tab="history">Riwayat</button>
-      </div>
-
-      <div class="layout">
-        <div class="left">
-          <div class="profile-card" id="profileCard">
-            <div class="profile-row">
-              <div class="avatar" id="avatarWrap"><img id="avatarImg" src="" alt="avatar" onerror="this.src='';this.style.background='#0b1220'"/></div>
-              <div style="flex:1">
-                <div id="displayName" style="font-weight:700">-</div>
-                <div id="displayUserId" class="muted small">-</div>
-                <div style="margin-top:6px"><a id="profileLink" href="#" target="_blank" class="link">Profile Roblox</a></div>
-                <div class="note">Teks user di kiri akan muncul saat kamu memasukkan username saat pertama akses. Data publik diambil dari Roblox API.</div>
-              </div>
-            </div>
-
-            <label for="usernameInput">Ubah username (tanpa @)</label>
-            <input id="usernameInput" type="text" placeholder="contoh: builderman" />
-            <button class="btn" onclick="applyUsername()">Set Username</button>
-
-          </div>
-        </div>
-
-        <div class="right">
-          <div id="calculatorPane">
-            <label for="luckInput">Masukkan Luck (%)</label>
-            <input id="luckInput" type="number" min="1" value="100" />
-            <button class="btn" onclick="calculateChances()">Hitung Peluang</button>
-
-            <table id="resultTable">
-              <thead>
-                <tr>
-                  <th data-col="name">Nama Ikan ⬍</th>
-                  <th data-col="location">Lokasi ⬍</th>
-                  <th data-col="base">Base Chance ⬍</th>
-                  <th data-col="final">Final Chance (%) ⬍</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <div id="historyPane" style="display:none">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div style="font-weight:700">Riwayat Pengguna</div>
-              <div class="history-actions">
-                <button class="ghost" onclick="refreshHistory()">Refresh</button>
-                <button class="ghost" onclick="clearHistory()">Hapus Semua</button>
-              </div>
-            </div>
-            <table id="historyTable">
-              <thead><tr><th>Username</th><th>Profile</th><th>Terakhir Akses</th><th>Aksi</th></tr></thead>
-              <tbody></tbody>
-            </table>
-            <div class="note">Riwayat disimpan secara lokal pada browser (localStorage). Data tidak dikirim ke server.</div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- modal (ask username on first visit) -->
-  <div id="modalBackdrop" class="modal-backdrop" style="display:none">
+  <div class="modal-bg" id="usernameModal">
     <div class="modal">
-      <h2>Halo! Masukkan username Roblox kamu</h2>
-      <p class="small">Masukkan username tanpa @. Profil akan ditampilkan di sebelah kiri. Riwayat tersimpan di browser.</p>
-      <input id="modalUsername" type="text" placeholder="contoh: builderman" style="width:100%;padding:10px;border-radius:8px;margin-top:10px;background:#071126;color:#fff;border:1px solid rgba(255,255,255,0.04)" />
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn" onclick="confirmModal()">Simpan</button>
-        <button class="ghost" onclick="skipModal()">Lewati</button>
-      </div>
-      <div class="note">Jika Roblox API diblokir oleh CORS, aplikasi akan tetap menampilkan link profil tanpa avatar.</div>
+      <h2>Masukkan Username Roblox</h2>
+      <p>Tanpa menggunakan @</p>
+      <input type="text" id="usernameInput" placeholder="Contoh: Builderman">
+      <button onclick="saveUsername()">Lanjut</button>
     </div>
   </div>
+
+  <h1>🎣 Fish It Secret Chance Calculator</h1>
+  <div class="container" id="mainContainer" style="display:none;">
+    <h3 id="profileTitle"></h3>
+    <label for="luckInput">Masukkan Luck (%)</label>
+    <input type="number" id="luckInput" placeholder="Contoh: 100" min="1" value="100">
+    <button onclick="calculateChances()">Hitung Peluang</button>
+    <div class="table-container">
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">Nama Ikan</th>
+            <th onclick="sortTable(1)">Lokasi</th>
+            <th onclick="sortTable(2)">Base Chance</th>
+            <th onclick="sortTable(3)">Final Chance (%)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer">Made with ❤️ for Fish It players</div>
 
   <script>
-    // data
     const fishList = [
       {name:"Eerie Shark", location:"Coral Reefs", base:250000},
       {name:"Blob Shark", location:"Ocean", base:250000},
@@ -165,183 +171,67 @@
       {name:"Frostborn Shark", location:"Crater Island", base:5000000}
     ];
 
-    // localStorage keys
-    const HISTORY_KEY = 'fishit_history_v1';
-    const SELECTED_USER_KEY = 'fishit_selected_user_v1';
-
-    // tabs
-    document.querySelectorAll('.tab').forEach(btn => btn.addEventListener('click', e => {
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      btn.classList.add('active');
-      const tab = btn.dataset.tab;
-      document.getElementById('calculatorPane').style.display = tab === 'calculator' ? 'block' : 'none';
-      document.getElementById('historyPane').style.display = tab === 'history' ? 'block' : 'none';
-    }));
-
-    // initial actions
-    window.addEventListener('load', ()=>{
-      // show modal if no selected user stored
-      const selected = localStorage.getItem(SELECTED_USER_KEY);
-      if(!selected) showModal(); else { setSelectedUsername(selected); }
-      calculateChances();
-      renderHistoryTable();
-    });
-
-    function showModal(){document.getElementById('modalBackdrop').style.display='flex';}
-    function hideModal(){document.getElementById('modalBackdrop').style.display='none';}
-
-    function confirmModal(){
-      const val = document.getElementById('modalUsername').value.trim();
-      if(!val){alert('Masukkan username atau tekan Lewati');return}
-      setSelectedUsername(val);
-      hideModal();
-    }
-    function skipModal(){hideModal();}
-
-    // set username (called from modal or left panel)
-    async function setSelectedUsername(username){
-      username = username.replace(/^@/, '').trim();
-      if(!username) return;
-      document.getElementById('usernameInput').value = username;
-      // save to storage
-      localStorage.setItem(SELECTED_USER_KEY, username);
-      // update history
-      updateHistoryEntry(username);
-      // fetch profile
-      await loadRobloxProfile(username);
+    function saveUsername() {
+      const username = document.getElementById('usernameInput').value.trim();
+      if (!username) {
+        alert("Masukkan username Roblox terlebih dahulu!");
+        return;
+      }
+      document.getElementById('profileTitle').innerText = "👤 Profil Roblox: " + username;
+      document.getElementById('usernameModal').style.display = "none";
+      document.getElementById('mainContainer').style.display = "block";
     }
 
-    async function applyUsername(){
-      const v = document.getElementById('usernameInput').value.trim();
-      if(!v){alert('Masukkan username');return}
-      await setSelectedUsername(v);
-      alert('Username disimpan.');
-    }
-
-    function updateHistoryEntry(username){
-      const now = new Date().toISOString();
-      let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-      const existing = history.find(h=>h.username.toLowerCase()===username.toLowerCase());
-      if(existing){ existing.lastAccess = now; }
-      else { history.push({username, profileUrl:`https://www.roblox.com/users/search?keyword=${encodeURIComponent(username)}`, lastAccess: now }); }
-      // keep most recent first
-      history = history.sort((a,b)=> new Date(b.lastAccess)-new Date(a.lastAccess));
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-      renderHistoryTable();
-    }
-
-    function renderHistoryTable(){
-      const tbody = document.querySelector('#historyTable tbody'); tbody.innerHTML='';
-      const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-      if(history.length===0){ tbody.innerHTML = '<tr><td colspan="4" class="muted">Tidak ada riwayat</td></tr>'; return }
-      history.forEach((h, idx)=>{
-        const tr = document.createElement('tr');
-        const when = new Date(h.lastAccess).toLocaleString();
-        tr.innerHTML = `<td>${h.username}</td><td><a class="link" href="https://www.roblox.com/users/${encodeURIComponent(h.username)}" target="_blank">Buka Profil</a></td><td>${when}</td><td><button class="ghost" onclick="removeHistory('${encodeURIComponent(h.username)}')">Hapus</button></td>`;
-        tbody.appendChild(tr);
+    function calculateChances() {
+      const luck = parseFloat(document.getElementById("luckInput").value);
+      const tableBody = document.querySelector("#resultTable tbody");
+      tableBody.innerHTML = "";
+      if (isNaN(luck) || luck <= 0) {
+        alert("Masukkan nilai luck yang valid!");
+        return;
+      }
+      fishList.forEach(fish => {
+        const finalRate = (1 / (fish.base / (luck / 100))) * 100;
+        const row = `
+          <tr>
+            <td>${fish.name}</td>
+            <td>${fish.location}</td>
+            <td>1 / ${fish.base.toLocaleString()}</td>
+            <td>${finalRate.toFixed(6)}%</td>
+          </tr>
+        `;
+        tableBody.innerHTML += row;
       });
     }
 
-    function removeHistory(encoded){
-      const username = decodeURIComponent(encoded);
-      let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-      history = history.filter(h=>h.username.toLowerCase()!==username.toLowerCase());
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-      renderHistoryTable();
-    }
-
-    function clearHistory(){ if(!confirm('Hapus semua riwayat dari browser ini?')) return; localStorage.removeItem(HISTORY_KEY); renderHistoryTable(); }
-    function refreshHistory(){ renderHistoryTable(); }
-
-    // Roblox API: get user id and avatar thumbnail
-    async function loadRobloxProfile(username){
-      const display = document.getElementById('displayName');
-      const idDisplay = document.getElementById('displayUserId');
-      const avatarImg = document.getElementById('avatarImg');
-      const profileLink = document.getElementById('profileLink');
-
-      display.textContent = 'Memuat...'; idDisplay.textContent='-'; avatarImg.src=''; profileLink.href='#';
-
-      try{
-        // get user id via usernames API
-        const res = await fetch('https://users.roblox.com/v1/usernames/users', {
-          method:'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({usernames:[username], excludeBannedUsers:true})
-        });
-        if(!res.ok) throw new Error('API tidak merespon');
-        const j = await res.json();
-        if(!j.data || j.data.length===0){ display.textContent = username; idDisplay.textContent='(user tidak ditemukan)'; profileLink.href = `https://www.roblox.com/search/users?keyword=${encodeURIComponent(username)}`; return }
-        const entry = j.data[0];
-        const userId = entry.id;
-        display.textContent = entry.username; idDisplay.textContent = 'UserId: ' + userId;
-        profileLink.href = 'https://www.roblox.com/users/' + userId + '/profile'; profileLink.textContent = 'Buka di Roblox';
-
-        // get headshot thumbnail
-        try{
-          const thumb = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`);
-          const tj = await thumb.json();
-          if(tj && tj.data && tj.data[0] && tj.data[0].imageUrl){ avatarImg.src = tj.data[0].imageUrl; }
-        }catch(e){ console.warn('thumbnail error',e); }
-
-      }catch(err){
-        console.warn('roblox profile error',err);
-        display.textContent = username; idDisplay.textContent = '(gagal mengambil data publik)'; profileLink.href = `https://www.roblox.com/search/users?keyword=${encodeURIComponent(username)}`;
+    function sortTable(n) {
+      const table = document.getElementById("resultTable");
+      let switching = true, dir = "asc", switchcount = 0;
+      while (switching) {
+        switching = false;
+        const rows = table.rows;
+        for (let i = 1; i < (rows.length - 1); i++) {
+          let shouldSwitch = false;
+          const x = rows[i].getElementsByTagName("TD")[n];
+          const y = rows[i + 1].getElementsByTagName("TD")[n];
+          if (dir === "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch = true; break;
+          } else if (dir === "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true; break;
+          }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount++;
+          } else {
+            if (switchcount === 0 && dir === "asc") {
+              dir = "desc";
+              switching = true;
+            }
+          }
+        }
       }
     }
-
-    // calculator
-    function calculateChances(){
-      const luck = parseFloat(document.getElementById('luckInput').value);
-      const tbody = document.querySelector('#resultTable tbody'); tbody.innerHTML='';
-      if(isNaN(luck)||luck<=0){alert('Masukkan luck yang valid');return}
-      fishList.forEach(f=>{
-        const adjustedBase = Math.max(1, Math.floor(f.base / (luck/100)));
-        const chance = (1/adjustedBase)*100;
-        const chanceStr = (chance >= 0.0001) ? chance.toFixed(6) + '%' : chance.toExponential(6) + '%';
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${f.name}</td><td>${f.location}</td><td>1 / ${f.base.toLocaleString()}</td><td>${chanceStr}</td>`;
-        tbody.appendChild(tr);
-      });
-      // attach sorting clicks on headers (left aligned)
-      attachHeaderSorts();
-    }
-
-    function attachHeaderSorts(){
-      const headers = document.querySelectorAll('#resultTable thead th');
-      headers.forEach((th, idx)=>{
-        th.onclick = ()=> sortTable(idx);
-      });
-    }
-
-    // sort table by column
-    function sortTable(n){
-      const table = document.getElementById('resultTable');
-      let rows = Array.from(table.tBodies[0].rows);
-      // determine current direction from dataset
-      const th = table.tHead.rows[0].cells[n];
-      const current = th.dataset.dir || 'asc';
-      const dir = current === 'asc' ? 'desc' : 'asc';
-      // parse values
-      rows.sort((a,b)=>{
-        const x = a.cells[n].innerText.trim().toLowerCase();
-        const y = b.cells[n].innerText.trim().toLowerCase();
-        // numeric detection
-        const xNum = parseFloat(x.replace(/[^0-9\.e-]/g,''));
-        const yNum = parseFloat(y.replace(/[^0-9\.e-]/g,''));
-        if(!isNaN(xNum) && !isNaN(yNum)){
-          return dir === 'asc' ? xNum - yNum : yNum - xNum;
-        }
-        return dir === 'asc' ? (x > y ? 1 : -1) : (x < y ? 1 : -1);
-      });
-      // reattach
-      const tbody = table.tBodies[0]; tbody.innerHTML=''; rows.forEach(r=>tbody.appendChild(r));
-      th.dataset.dir = dir; // save new dir
-    }
-
-    // public helpers
-    // allow clicking username in history to set selected
-    window.removeHistory = removeHistory; window.refreshHistory = refreshHistory; window.clearHistory = clearHistory;
-    window.applyUsername = applyUsername; window.calculateChances = calculateChances; window.setSelectedUsername = setSelectedUsername;
-
   </script>
 </body>
 </html>
