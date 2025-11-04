@@ -9,27 +9,32 @@
       background-color: #0d0d0d;
       color: #f0f0f0;
       font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 20px;
       margin: 0;
-      padding: 0;
     }
     h1 {
-      text-align: center;
       color: #00bfff;
-      margin-top: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0,191,255,0.6);
     }
     .container {
-      max-width: 900px;
-      margin: 20px auto;
-      background: #1a1a1a;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 191, 255, 0.15);
+      background-color: #1a1a1a;
       padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 191, 255, 0.25);
+      max-width: 800px;
+      width: 100%;
     }
     label {
       font-weight: bold;
-      color: #a8a8a8;
-      display: block;
       margin-bottom: 8px;
+      display: block;
+      color: #a8a8a8;
     }
     input {
       width: 100%;
@@ -57,10 +62,25 @@
     button:hover {
       background-color: #0099cc;
     }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 15px;
+    }
+    .profile img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 2px solid #00bfff;
+    }
     .table-container {
       max-height: 400px;
       overflow-y: auto;
       border-radius: 8px;
+      margin-top: 10px;
     }
     table {
       width: 100%;
@@ -75,6 +95,9 @@
       background-color: #111;
       color: #00bfff;
       cursor: pointer;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
     tr:nth-child(even) {
       background-color: #151515;
@@ -83,41 +106,55 @@
       background-color: #1e1e1e;
     }
     .footer {
-      text-align: center;
-      color: #555;
       margin-top: 20px;
+      color: #555;
       font-size: 0.9rem;
+      text-align: center;
     }
-    /* Modal */
+    /* Modal Styling */
     .modal-bg {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
       display: flex;
-      align-items: center;
       justify-content: center;
-      z-index: 1000;
+      align-items: center;
+      z-index: 999;
     }
     .modal {
       background: #1a1a1a;
-      padding: 25px;
-      border-radius: 10px;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,191,255,0.3);
       width: 90%;
       max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
     }
     .modal h2 {
       color: #00bfff;
+      margin-bottom: 10px;
+    }
+    .modal p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
     }
     .modal input {
-      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #2a2a2a;
+      color: white;
+      text-align: center;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
+  <!-- Modal Popup Username -->
   <div class="modal-bg" id="usernameModal">
     <div class="modal">
       <h2>Masukkan Username Roblox</h2>
@@ -128,11 +165,20 @@
   </div>
 
   <h1>🎣 Fish It Secret Chance Calculator</h1>
+
   <div class="container" id="mainContainer" style="display:none;">
-    <h3 id="profileTitle"></h3>
+    <div class="profile">
+      <img id="avatar" src="" alt="Avatar">
+      <div>
+        <div id="robloxName"></div>
+        <a id="robloxProfile" href="#" target="_blank" style="color:#00bfff;text-decoration:none;">Lihat Profil Roblox</a>
+      </div>
+    </div>
+
     <label for="luckInput">Masukkan Luck (%)</label>
     <input type="number" id="luckInput" placeholder="Contoh: 100" min="1" value="100">
     <button onclick="calculateChances()">Hitung Peluang</button>
+
     <div class="table-container">
       <table id="resultTable">
         <thead>
@@ -147,6 +193,7 @@
       </table>
     </div>
   </div>
+
   <div class="footer">Made with ❤️ for Fish It players</div>
 
   <script>
@@ -171,15 +218,43 @@
       {name:"Frostborn Shark", location:"Crater Island", base:5000000}
     ];
 
+    const defaultAvatar = "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-420x420.png";
+
     function saveUsername() {
-      const username = document.getElementById('usernameInput').value.trim();
+      const username = document.getElementById("usernameInput").value.trim();
       if (!username) {
         alert("Masukkan username Roblox terlebih dahulu!");
         return;
       }
-      document.getElementById('profileTitle').innerText = "👤 Profil Roblox: " + username;
-      document.getElementById('usernameModal').style.display = "none";
-      document.getElementById('mainContainer').style.display = "block";
+
+      document.getElementById("usernameModal").style.display = "none";
+      document.getElementById("mainContainer").style.display = "block";
+      loadRobloxProfile(username);
+    }
+
+    async function loadRobloxProfile(username) {
+      try {
+        const res = await fetch(`https://users.roblox.com/v1/usernames/users`, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({usernames: [username]})
+        });
+        const data = await res.json();
+        if (data.data && data.data.length > 0) {
+          const user = data.data[0];
+          const userId = user.id;
+          const avatarRes = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=true`);
+          const avatarData = await avatarRes.json();
+          const avatarUrl = avatarData.data?.[0]?.imageUrl || defaultAvatar;
+          document.getElementById("avatar").src = avatarUrl;
+          document.getElementById("robloxName").innerText = username;
+          document.getElementById("robloxProfile").href = `https://www.roblox.com/users/${userId}/profile`;
+        } else throw new Error("Not found");
+      } catch (e) {
+        document.getElementById("avatar").src = defaultAvatar;
+        document.getElementById("robloxName").innerText = username + " (Guest)";
+        document.getElementById("robloxProfile").href = `https://www.roblox.com/search/users?keyword=${username}`;
+      }
     }
 
     function calculateChances() {
@@ -198,8 +273,7 @@
             <td>${fish.location}</td>
             <td>1 / ${fish.base.toLocaleString()}</td>
             <td>${finalRate.toFixed(6)}%</td>
-          </tr>
-        `;
+          </tr>`;
         tableBody.innerHTML += row;
       });
     }
